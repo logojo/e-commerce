@@ -33,7 +33,7 @@ export default async function({ params } : Props ) {
   const categoryProducts = products.filter(product => product.gender === id )
 
   return (
-    <div>
+    <div className="px-1">
       <Title title={`Articulos para ${ validCategories[id] }`} subtitle="Todos los prod" />
       <ProductGrid products={ categoryProducts } />
     </div>
