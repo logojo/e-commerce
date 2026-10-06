@@ -1,7 +1,7 @@
 
 import { notFound } from "next/navigation";
 
-import { initialData } from "@/app/seed/seed";
+import { initialData } from "@/app/seed/seeder";
 import { MobileSliceShow, QuantitySelector, SizeSelector, SliceShow } from "@/app/components";
 
 interface Props {
