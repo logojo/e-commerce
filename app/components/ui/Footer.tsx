@@ -1,6 +1,5 @@
 import Link from "next/link"
 
-
 export const Footer = () => {
   return (
     <div className="flex justify-center text-gray-500 text-sm  mb-6">

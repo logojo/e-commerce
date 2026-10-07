@@ -33,6 +33,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "seed/tsconfig.json"  ],
+, "tsconfig.json"  ],
   "exclude": ["node_modules"]
 }

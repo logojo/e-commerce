@@ -3,7 +3,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { QuantitySelector, Title } from "@/app/components";
-import { initialData } from "@/app/seed/seeder";
+import { initialData } from "@/seed/seeder";
 
 const productsInCart = [
     initialData.products[0],

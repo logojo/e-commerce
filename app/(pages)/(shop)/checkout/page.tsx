@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Title } from "@/app/components";
-import { initialData } from "@/app/seed/seeder";
+import { initialData } from "@/seed/seeder";
 
 const productsInCart = [
     initialData.products[0],
