@@ -25,7 +25,7 @@ export default async function Home({searchParams} : Props) {
     <div className="">
        <Title title="Tienda" subtitle="Todos los productos" />
        <ProductGrid products={ products } />
-       <Pagination totalPages={ totalPages } page={page} path="/"/>
+       <Pagination totalPages={ totalPages }   />
     </div>
 
   );

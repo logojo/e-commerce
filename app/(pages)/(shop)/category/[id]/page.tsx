@@ -47,7 +47,7 @@ export default async function({ params, searchParams } : Props ) {
     <div className="px-1">
       <Title title={`Articulos para ${ validCategories[id] }`} subtitle="Todos los prod" />
       <ProductGrid products={ products } />
-      <Pagination totalPages={ totalPages } page={page} path={`/category/${id}`}/>
+      <Pagination totalPages={ totalPages } />
     </div>
   );
 }

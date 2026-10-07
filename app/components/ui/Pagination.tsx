@@ -1,24 +1,38 @@
-import clsx from "clsx";
+'use client'
+
 import Link from "next/link"
+import { usePathname, useSearchParams } from "next/navigation";
+import clsx from "clsx";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5"
 
 
 interface Props {
   totalPages: number;
-  page: number;
-  path: string;
 }
 
 
-export const Pagination = ({ totalPages, page, path }: Props) => {
+export const Pagination = ({ totalPages }: Props) => {
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currenPage = Number( searchParams.get('page')  ) || 1;
+
+  const createPageUrl = ( pageNumber: number | string ) => {
+    const params = new URLSearchParams( searchParams );
+    
+    if ( pageNumber === '...')  {
+      return `${ pathname}?${ params.toString() }`
+    }
+  }
+
   return (
     <div className="flex justify-center mb-6 space-x-2">
-      <Link href={`/?page=${page - 1}`}
+      <Link href={`/?page=${currenPage - 1}`}
           className={
             clsx(
               "flex items-center rounded border border-gray-300 px-2 hover:bg-gray-100 active:scale-90 active:bg-gray-200",
               {
-                 "pointer-events-none opacity-30": page === 1
+                 "pointer-events-none opacity-30": currenPage === 1
               }
             )}
        >
@@ -35,7 +49,7 @@ export const Pagination = ({ totalPages, page, path }: Props) => {
             className={
               clsx(
                 "rounded border border-gray-300 px-2 hover:bg-gray-100 active:scale-90 active:bg-gray-200",{
-                "bg-blue-500 border-blue-600 text-white": page === pageNumber 
+                "bg-blue-500 border-blue-600 text-white": currenPage === pageNumber 
                 }
               )}  
           >
@@ -44,12 +58,12 @@ export const Pagination = ({ totalPages, page, path }: Props) => {
         )
       })}
 
-      <Link href={`/?page=${page + 1}`}
+      <Link href={`/?page=${currenPage + 1}`}
           className={
             clsx(
               "flex items-center rounded border border-gray-300 px-2 hover:bg-gray-100 active:scale-90 active:bg-gray-200",
               {
-                 "pointer-events-none opacity-30": page === totalPages
+                 "pointer-events-none opacity-30": currenPage === totalPages
               }
             )}
        >
