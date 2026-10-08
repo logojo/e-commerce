@@ -1,46 +1,30 @@
-'use server'
+
 
 import { ValidTypes } from "@/app/interfaces";
 import { Gender } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma"
 
+
 interface PaginatonOptions {
     page?:number,
     take?: number,
-    pgender?: string
+    gender?: Gender
 }
 
-export const getPaginatedProductsWithImages = async({ page = 1, take = 12, pgender } : PaginatonOptions) => {
+export const getPaginatedProductsWithImages = async({ page = 1, take = 12, gender } : PaginatonOptions) => {
+ 
 
-    if( isNaN( Number( page)) || page < 1 ) page = 1;
+    if( isNaN( Number( page )) || page < 1 ) page = 1;
 
     if( isNaN( Number( take )) ) take = 12;
-
-    const validGenders = Object.values(Gender);
-
-    const gender =
-        validGenders.includes(pgender as Gender)
-            ? (pgender as Gender)
-            : undefined;
-
-    console.log(gender);
-    
-
-    const where = {
-        ...(gender && {
-            gender,
-        }),
-
-        //aqui se agregan los demas criterios
-    };
-
-    
     
     try {
         //consulta paginada
         const [products, totalProducts] = await Promise.all([
             prisma.product.findMany({
-                where,
+                where: {
+                    gender
+                },
                 take: take,
                 skip: (page - 1) * take,
                 include: {
@@ -57,7 +41,11 @@ export const getPaginatedProductsWithImages = async({ page = 1, take = 12, pgend
             }),
 
             //todo
-            prisma.product.count({where}),
+            prisma.product.count({
+                where: {
+                    gender
+                },
+            }),
         ]);
 
        const totalPages = Math.ceil(totalProducts / take);

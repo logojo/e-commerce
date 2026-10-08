@@ -1,4 +1,6 @@
-
+export { OrderSkeleton } from "./sckeletons/OrderSkeleton";
+export { ProductsSckeleton } from "./sckeletons/ProductsSckeleton";
+export { ProductDetailSkeleton } from "./sckeletons/ProductDetailSkeleton";
 
 
 export { MobileSliceShow } from "./product/SliceShow/MobileSliceShow";
@@ -16,3 +18,5 @@ export { Pagination } from "./ui/Pagination";
 export { Sidebar } from "./ui/Sidebar";
 export { Title } from "./ui/Title";
 export { TopMenu } from "./ui/TopMenu";
+
+

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { initialData } from "@/seed/seeder";
 import { MobileSliceShow, QuantitySelector, SizeSelector, SliceShow } from "@/app/components";
+import { Suspense } from "react";
+import { ProductDetailSkeleton } from "@/app/components";
 
 interface Props {
   params: Promise<{
@@ -10,15 +12,28 @@ interface Props {
   }>;
 }
 
+
 export default async function({ params } : Props) {
+
+  return (
+    <section className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
+        <Suspense fallback={<ProductDetailSkeleton />}>
+          <Product  params={params}/>
+        </Suspense>
+    </section>
+  )
+}
+
+async function Product({ params } : Props) {
   const { slug } = await params;
   const product = initialData.products.find( product => product.slug === slug )
 
   if( !product ) {
     notFound();
   }
+  
   return (
-    <section className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
+    <>
       <div className="col-span-1 md:col-span-2">
 
         <MobileSliceShow 
@@ -33,6 +48,7 @@ export default async function({ params } : Props) {
              className="hidden md:block"
           />
       </div>
+
       <div className="col-span-1 px-5">
         <h1 className="font-title antialiased font-bold text-lg">{ product.title}</h1>
         <p className="text-lg mb-5 text-end mt-2">$ { product.price.toFixed(2) }</p>
@@ -52,6 +68,7 @@ export default async function({ params } : Props) {
           {  product.description }
         </p>
       </div>
-    </section>
+
+    </>
   );
 }

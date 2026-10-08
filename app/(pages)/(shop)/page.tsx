@@ -1,7 +1,7 @@
-import { Pagination, ProductGrid, Title } from "@/app/components";
-import { getPaginatedProductsWithImages } from "@/app/actions/products/product-pagination";
+import { Suspense } from "react";
+import { Pagination, ProductGrid, ProductsSckeleton, Title } from "@/app/components";
 import { redirect } from "next/navigation";
-
+import { getCachedProducts } from "@/lib/products/products";
 
 interface Props {
   searchParams: Promise<{
@@ -10,23 +10,40 @@ interface Props {
   }>
 }
 
-export default async function Home({searchParams} : Props) {
+
+export default async function Home({ searchParams }: Props) {
+  return (
+    <div className="px-1">
+      <Title
+        title="Tienda"
+        subtitle="Todos los productos"
+      />
+
+      <Suspense fallback={<ProductsSckeleton />}>
+        <Products
+          searchParams={searchParams}
+        />
+      </Suspense>
+    </div>
+  );
+}
+
+async function Products({searchParams} : Props) {
   const params = await searchParams;
   const page = params.page ? parseInt(params.page) : 1;
-  const take = params.take ? parseInt(params.take) : 12;
+  const take = params.take ? parseInt(params.take) : 6;
 
-  const { products, totalPages } = await getPaginatedProductsWithImages({page, take });
+  //tomando los productos de la funsión cacheada 
+  const { products, totalPages  } = await getCachedProducts(page, take );
 
   if( products.length === 0 ) {
       redirect('/')
   }
  
   return (
-    <div className="">
-       <Title title="Tienda" subtitle="Todos los productos" />
-       <ProductGrid products={ products } />
-       <Pagination totalPages={ totalPages }   />
-    </div>
-
+    <>
+      <ProductGrid products={ products } />
+      <Pagination totalPages={totalPages} />
+    </>
   );
 }
