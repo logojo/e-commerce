@@ -75,6 +75,6 @@ async function main() {
 }
 
 (() => {
-    if(process.env.NODE_ENV === 'producction') return;
+    if(process.env.NODE_ENV === 'production') return;
     main();
 })();
