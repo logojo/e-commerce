@@ -1,20 +1,20 @@
+'use client'
 import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+//import { redirect } from "next/navigation";
 
-import { QuantitySelector, Title } from "@/app/components";
-import { initialData } from "@/seed/seeder";
+import { QuantitySelector } from "@/app/components/product/QuantitySelector";
+import { Title } from "@/app/components/ui/Title";
+import { useCartStore } from "@/app/store/cart/cart-store";
 
-const productsInCart = [
-    initialData.products[0],
-    initialData.products[1],
-    initialData.products[2],
-]
+
 export default function() {
 
-  if( productsInCart.length === 0 ) {
-      redirect('/empty')
-  }
+  const { cart } = useCartStore();
+
+  // if( cart.length === 0 ) {
+  //     redirect('/empty')
+  // }
   
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
@@ -32,10 +32,10 @@ export default function() {
            
 
               {
-                productsInCart.map( product => (
-                  <div key={ product.slug } className="flex mb-5">
+                cart.map( (product, index) => (
+                  <div key={`${product.slug}-${index}`} className="flex mb-5">
                     <Image 
-                      src={`/products/${product.images[0]}`}
+                      src={`/products/${product.image}`}
                       alt={product.title}
                       width={100}
                       height={100}
@@ -50,7 +50,7 @@ export default function() {
                     <div>
                       <p>{ product.title }</p>
                       <p>${ product.price.toFixed(2) }</p>
-                      <QuantitySelector quantity={1} />
+                      {/* <QuantitySelector quantity={1} /> */}
                       <button className="underline mt-3 active:scale-95 cursor-pointer">
                         remover
                       </button>

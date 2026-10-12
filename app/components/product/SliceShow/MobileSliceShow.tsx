@@ -34,8 +34,8 @@ export const MobileSliceShow = ({ images, title, className } : Props ) => {
             delay: 2500
           }}
           modules={[FreeMode, Autoplay, Pagination]}
-          onSlideChange={() => console.log('slide change')}
-          onSwiper={(swiper) => console.log(swiper)}
+          // onSlideChange={() => console.log('slide change')}
+          // onSwiper={(swiper) => console.log(swiper)}
         >
           {
             images.map( image => (

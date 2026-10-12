@@ -1,10 +1,12 @@
 
+import { Suspense } from "react";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { initialData } from "@/seed/seeder";
-import { MobileSliceShow, QuantitySelector, SizeSelector, SliceShow } from "@/app/components";
-import { Suspense } from "react";
+import { MobileSliceShow, QuantitySelector, SizeSelector, SliceShow, StockLabel } from "@/app/components";
 import { ProductDetailSkeleton } from "@/app/components";
+import { getCachedProductBySlug } from "@/lib/products/product-slug";
+import AddToCart from "./ui/AddToCart";
 
 interface Props {
   params: Promise<{
@@ -12,21 +14,37 @@ interface Props {
   }>;
 }
 
+export async function generateMetadata({ params } : Props): Promise<Metadata> {
+  const slug = (await params).slug
+ 
+  const product = await getCachedProductBySlug( slug )
+ 
+  return {
+    title: product?.title,
+    description: product?.description,
+    openGraph: {
+      title: product?.title,
+      description: product?.description,
+      images: [`/products/${product?.images[1]}`]
+    }
+  }
+}
+
 
 export default async function({ params } : Props) {
 
   return (
-    <section className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
-        <Suspense fallback={<ProductDetailSkeleton />}>
-          <Product  params={params}/>
-        </Suspense>
-    </section>
+    <Suspense fallback={<ProductDetailSkeleton />}>
+      <section className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Product  params={params}/>
+      </section>
+    </Suspense>
   )
 }
 
 async function Product({ params } : Props) {
   const { slug } = await params;
-  const product = initialData.products.find( product => product.slug === slug )
+  const product = await getCachedProductBySlug( slug )
 
   if( !product ) {
     notFound();
@@ -45,23 +63,16 @@ async function Product({ params } : Props) {
         <SliceShow 
             images={product.images} 
             title={ product.title } 
-             className="hidden md:block"
+            className="hidden md:block"
           />
       </div>
 
       <div className="col-span-1 px-5">
+        <StockLabel slug={product.slug } />
         <h1 className="font-title antialiased font-bold text-lg">{ product.title}</h1>
         <p className="text-lg mb-5 text-end mt-2">$ { product.price.toFixed(2) }</p>
 
-        {/* Selector de tallas */}
-        <SizeSelector sizes={product.sizes} selectedSize="M" />
-
-        {/* Selector de cantidad */}
-        <QuantitySelector quantity={1} />
-
-        <button className="btn-primary my-5 cursor-pointer active:scale-90">
-          Agregar al carrito
-        </button>
+        <AddToCart product={product} />
 
         <h3 className="font-bold text-sm">Descripción</h3>
         <p className="font-light text-base md:text-sm text-justify">

@@ -3,9 +3,13 @@
 import Link from "next/link"
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5"
 import { useUIStore } from "@/app/store";
+import { useCartStore } from "@/app/store/cart/cart-store";
 
 export const TopMenu = () => {
   const { handleSideMenu } = useUIStore();
+  const { cart } = useCartStore();
+  const total = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <nav className="flex px-5 py-2.5 justify-between items-center w-full">
         <div>
@@ -29,7 +33,7 @@ export const TopMenu = () => {
             <Link href="/cart" className="mx-1">
                 <div className="relative">
                     <span className="absolute px-1 -top-1.5 -right-1.5 bg-blue-700 rounded-full text-white text-xs font-bold">
-                        3
+                       { total }
                     </span>
                     <IoCartOutline className="w-5 h-5" />
                 </div>

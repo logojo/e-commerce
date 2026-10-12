@@ -8,6 +8,7 @@ export { QuantitySelector } from "./product/QuantitySelector";
 export { SizeSelector } from "./product/SizeSelector";
 export { SliceShow } from "./product/SliceShow/SliceShow";
 export { SliceShowItem } from "./product/SliceShow/SliceShowItem";
+export { StockLabel } from './product/StockLabel';
 
 export { ProductGrid } from "./products/ProductGrid";
 export { ProductGridItem } from "./products/ProductGridItem";
