@@ -1,4 +1,6 @@
 'use client'
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 //import { redirect } from "next/navigation";
@@ -6,11 +8,16 @@ import Image from "next/image";
 import { QuantitySelector } from "@/app/components/product/QuantitySelector";
 import { Title } from "@/app/components/ui/Title";
 import { useCartStore } from "@/app/store/cart/cart-store";
+import CartDetailsSkeleton from "@/app/components/sckeletons/CartDetailsSkeleton";
 
 
 export default function() {
-
+  const [loading, setLoading] = useState(false)
   const { cart } = useCartStore();
+
+  useEffect(() => {
+      setLoading(true)
+    }, [])
 
   // if( cart.length === 0 ) {
   //     redirect('/empty')
@@ -32,32 +39,36 @@ export default function() {
            
 
               {
-                cart.map( (product, index) => (
-                  <div key={`${product.slug}-${index}`} className="flex mb-5">
-                    <Image 
-                      src={`/products/${product.image}`}
-                      alt={product.title}
-                      width={100}
-                      height={100}
-                      loading="eager"
-                      className="mr-5 rounded"
-                      style={{
-                        width: '100px',
-                        height: '100px'
-                      }}
-                    />
+                loading 
+                 ?
+                  cart.map( (product, index) => (
+                    <div key={`${product.slug}-${index}`} className="flex mb-5 fade-in">
+                      <Image 
+                        src={`/products/${product.image}`}
+                        alt={product.title}
+                        width={100}
+                        height={100}
+                        loading="eager"
+                        className="mr-5 rounded"
+                        style={{
+                          width: '100px',
+                          height: '100px'
+                        }}
+                      />
 
-                    <div>
-                      <p>{ product.title }</p>
-                      <p>${ product.price.toFixed(2) }</p>
-                      {/* <QuantitySelector quantity={1} /> */}
-                      <button className="underline mt-3 active:scale-95 cursor-pointer">
-                        remover
-                      </button>
+                    
+                      <div>
+                        <p>{ product.title }</p>
+                        <p>${ product.price.toFixed(2) }</p>
+                        {/* <QuantitySelector quantity={1} /> */}
+                        <button className="underline mt-3 active:scale-95 cursor-pointer">
+                          remover
+                        </button>
+                      </div>
+
                     </div>
-
-                  </div>
-                ))
+                  ))
+                : <CartDetailsSkeleton />
               }
             </div>
 
