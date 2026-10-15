@@ -46,7 +46,7 @@ export function FlyingIcon({
       <Image 
             src={`/products/${image}`}
             alt='imagen del producto'
-            className='md:rounded object-fill bg-gray-500 '
+            className='md:rounded object-fill bg-gray-500 w-auto h-auto '
             width={100}
             height={100}       
            loading="eager"

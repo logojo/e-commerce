@@ -7,8 +7,10 @@ import { ResumenSckeleton } from "@/app/components/sckeletons/ResumenSckeleton";
 
 export const ResumenOrder = () => {
   const hasHydrated = useCartStore((state) => state.hasHydrated);
-  const resumen = useCartStore(useShallow((state) => state.getResumenCart()));
+  //const resumen = useCartStore(useShallow((state) => state.getResumenCart()));
 
+  //al desestructurar te ahorrar el useShallow
+  const {totalProducts, subtotal, iva } = useCartStore(useShallow((state) => state.getResumenCart()));
 
   return (
     <div className="rounded-xl shadow-xl p-7">
@@ -20,16 +22,16 @@ export const ResumenOrder = () => {
               <>
                 <div className="grid grid-cols-2">
                     <span>No. Productos</span>
-                    <span className="text-right">{resumen.totalProducts} artículos</span>
+                    <span className="text-right">{totalProducts} artículos</span>
 
                     <span>Subtotal</span>
-                    <span className="text-right">$ {resumen.subtotal}</span>
+                    <span className="text-right">$ {subtotal}</span>
 
                     <span>Impuestos (16%)</span>
-                    <span className="text-right">$ { resumen.iva.toFixed(2) }</span>
+                    <span className="text-right">$ { iva.toFixed(2) }</span>
 
                     <span className="text-2xl mt-5">Total</span>
-                    <span className="text-right mt-5 text-2xl">$ {resumen.subtotal + resumen.iva }</span>
+                    <span className="text-right mt-5 text-2xl">$ {subtotal + iva }</span>
                 </div>
 
                 <div className="mt-5 mb-2">
