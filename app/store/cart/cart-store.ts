@@ -2,12 +2,23 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import type { CartProduct } from "@/app/interfaces";
 
+interface Resumen {
+    totalProducts: number
+    subtotal: number
+    iva: number
+}
+
 interface State {
     cart: CartProduct[];
     hasHydrated: boolean;
     addProduct: ( product: CartProduct ) => void;
-    updateQuantity: () => void;
-    removeProduct: () => void;
+    updateQuantity: (product: CartProduct, quantity: number ) => void;
+    getResumenCart: () => {
+            totalProducts: number;
+            subtotal: number;
+            iva: number;
+        };
+    removeProduct: (product: CartProduct) => void;
     setHasHydrated: (value: boolean) => void;
 }
 
@@ -16,6 +27,7 @@ export const useCartStore = create<State>()(
         persist(
                 (set, get) => ({
                     cart: [],
+                    quantity: 1,
                     hasHydrated: false,
                     addProduct: ( product : CartProduct) => {
                         const { cart } = get();
@@ -43,13 +55,43 @@ export const useCartStore = create<State>()(
                     },
 
                     getTotalItems:() => {
-                        const { cart } = get()
+                       const { cart } = get()
                         const total =  cart.reduce((total, item) => total + item.quantity, 0);
                         return total;
                     },
 
-                    updateQuantity: () => {},
-                    removeProduct: () => {},       
+                    getResumenCart:() => {
+                        const { cart } = get()
+                        const totalProducts =  cart.reduce((total, item) => total + item.quantity, 0);
+                        const subtotal =  cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                        const iva = subtotal * .16;
+                        return  {
+                            totalProducts,
+                            subtotal,
+                            iva
+                        };
+                    },
+
+                    updateQuantity: ( product : CartProduct, quantity: number ) => {
+                        const { cart } = get();
+                        const updateQuantity = cart.map( (item) => {
+                            if( item.id === product.id && item.size === product.size ) {
+                                return {...item, quantity }
+                            }
+
+                            return item;
+                        })
+
+                        set({ cart: updateQuantity })
+                    },
+                    removeProduct: ( product ) => {
+                        console.log(product);
+                        
+                        const { cart } = get();
+                        const updateProducts = cart.filter( (item) =>  item.id !== product.id || item.size !== product.size ) 
+
+                        set({ cart: updateProducts })
+                    },       
                     setHasHydrated: (value) => {
                         set({ hasHydrated: value });
                     },            
@@ -60,8 +102,6 @@ export const useCartStore = create<State>()(
                 onRehydrateStorage: () => (state, error) => {
                     if (!error) {
                         state?.setHasHydrated(true);
-                        console.log( state?.hasHydrated );
-                        
                     }
                 },               
             }

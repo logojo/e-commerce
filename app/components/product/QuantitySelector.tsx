@@ -3,8 +3,8 @@
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5"
 
 interface Props {
-    quantity : number
-    setQuantity: (quantity: number) =>  void
+    quantity : number;
+    setQuantity: (quantity: number) =>  void;
 }
 
 export const QuantitySelector = ({ quantity, setQuantity } : Props) => {

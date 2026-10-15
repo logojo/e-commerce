@@ -12,11 +12,6 @@ export const TopMenu = () => {
   const total = useCartStore( state => state.cart.reduce((total, item) => total + item.quantity, 0) );
   const hasHydrated = useCartStore((state) => state.hasHydrated);
 
- //* esperando el la sincronización de zustand con el server
-
-  
-
-
   return (
     <nav className="flex px-5 py-2.5 justify-between items-center w-full">
         <div>
