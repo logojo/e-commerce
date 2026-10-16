@@ -3,12 +3,12 @@ import { Footer } from "@/app/components/ui/Footer";
 
 
 
-
 export default function ShopLayout({
  children
 }: {
  children: React.ReactNode;
 }) {
+
   return (
     <main className="min-h-screen">
       <TopMenu />
@@ -20,3 +20,7 @@ export default function ShopLayout({
     </main>
   );
 }
+
+
+
+

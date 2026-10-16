@@ -4,6 +4,7 @@ import Link from "next/link"
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline, IoShirtOutline, IoTicketOutline } from "react-icons/io5"
 import { useUIStore } from "@/app/store";
 import clsx from "clsx";
+import { signOut } from "@/auth.config";
 
 export const Sidebar = () => {
   const { isSideMenuOpen, handleSideMenu } = useUIStore();
@@ -69,7 +70,10 @@ export const Sidebar = () => {
                 />
             </div>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+            <Link href="/profile" 
+                  className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                  onClick={handleSideMenu}
+                  >
                 <IoPersonOutline size={18} />
                 <span>Perfil</span>
             </Link>
@@ -83,6 +87,8 @@ export const Sidebar = () => {
                 <IoLogInOutline size={18} />
                 <span>Ingresar</span>
             </Link>
+
+            
 
             <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                 <IoLogOutOutline size={18} />
@@ -106,7 +112,6 @@ export const Sidebar = () => {
                 <span>Usuarios</span>
             </Link>
       </nav>
-
 
     </div>
   )

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 
 import { OrderSkeleton, Title } from "@/app/components";
@@ -35,9 +34,6 @@ export default async function({ params } : Props ) {
 
 async function Orden({ params } : Props ) {
   const { id } = await params;
-
-  // todo: verificar usuario orden etc
-  // redirect();
 
   return (
     <>
