@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { MobileSliceShow, QuantitySelector, SizeSelector, SliceShow, StockLabel } from "@/app/components";
+import { MobileSliceShow, SliceShow, StockLabel } from "@/app/components";
 import { ProductDetailSkeleton } from "@/app/components";
 import { getCachedProductBySlug } from "@/lib/products/product-slug";
 import AddToCart from "./ui/AddToCart";

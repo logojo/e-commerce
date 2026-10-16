@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { IoCart, IoCartOutline } from "react-icons/io5";
 
 type FlyingProductProps = {
   startX: number;

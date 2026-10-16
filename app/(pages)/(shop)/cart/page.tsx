@@ -1,20 +1,9 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
-
-
 import { Title } from "@/app/components/ui/Title";
 
 import { ProductsInCart } from "./ui/ProductsInCart";
 import { ResumenOrder } from "./ui/ResumenOrder";
 
-
-
 export default function() {
-  
-
-  // if( cart.length === 0 ) {
-  //     redirect('/empty')
-  // }
   
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">

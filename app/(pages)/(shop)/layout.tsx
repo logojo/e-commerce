@@ -1,4 +1,6 @@
-import { Footer, Sidebar, TopMenu } from "@/app/components";
+import { Sidebar, TopMenu } from "@/app/components";
+import { Footer } from "@/app/components/ui/Footer";
+
 
 
 

@@ -1,10 +1,10 @@
 'use client' 
 
-import { useEffect, useState } from 'react';
 import Link from "next/link"
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5"
 import { useUIStore } from "@/app/store";
 import { useCartStore } from "@/app/store/cart/cart-store";
+import clsx from 'clsx';
 
 export const TopMenu = () => {
   const { handleSideMenu } = useUIStore();
@@ -29,17 +29,18 @@ export const TopMenu = () => {
 
         <div className="flex items-center">
             <Link href="/search" className="mx-1">
-                <IoSearchOutline className="w-5 h-5" />
+                <IoSearchOutline className="w-5 h-5 transition duration-300 hover:-translate-y-1" />
             </Link>
 
-            <Link href="/cart" className="mx-1">
+            <Link href={ total > 0 ? "/cart" : "/empty"} 
+                  className="mx-1">
 
                 <div className="relative">
                    
                     {
                         total > 0  &&
                         (
-                            <span className="absolute px-1 -top-1.5 -right-1.5 bg-blue-700 rounded-full text-white text-xs font-bold">
+                            <span className="fade-in absolute px-1 -top-1.5 -right-1.5 bg-blue-700 rounded-full text-white text-xs font-bold">
                             { total }
                             </span>
                         ) 
@@ -53,7 +54,12 @@ export const TopMenu = () => {
                             
                         )
                     } 
-                    <IoCartOutline className="w-5 h-5" />
+                    <IoCartOutline className={clsx(
+                    "w-5 h-5 ",
+                    {
+                       "transition duration-300 hover:-translate-y-1": total === 0
+                    }
+                )} />
                 </div>
             </Link>
 

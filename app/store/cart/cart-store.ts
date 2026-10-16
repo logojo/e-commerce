@@ -2,12 +2,6 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import type { CartProduct } from "@/app/interfaces";
 
-interface Resumen {
-    totalProducts: number
-    subtotal: number
-    iva: number
-}
-
 interface State {
     cart: CartProduct[];
     hasHydrated: boolean;
@@ -84,9 +78,7 @@ export const useCartStore = create<State>()(
 
                         set({ cart: updateQuantity })
                     },
-                    removeProduct: ( product ) => {
-                        console.log(product);
-                        
+                    removeProduct: ( product ) => {                        
                         const { cart } = get();
                         const updateProducts = cart.filter( (item) =>  item.id !== product.id || item.size !== product.size ) 
 

@@ -13,7 +13,6 @@ export { StockLabel } from './product/StockLabel';
 export { ProductGrid } from "./products/ProductGrid";
 export { ProductGridItem } from "./products/ProductGridItem";
 
-export { Footer } from "./ui/Footer";
 export { PageNotFound } from "./ui/PageNotFound";
 export { Pagination } from "./ui/Pagination";
 export { Sidebar } from "./ui/Sidebar";

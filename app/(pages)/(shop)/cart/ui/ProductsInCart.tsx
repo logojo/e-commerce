@@ -2,15 +2,25 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
 import { useCartStore } from "@/app/store/cart/cart-store"
 import CartDetailsSkeleton from "@/app/components/sckeletons/CartDetailsSkeleton"
 import { QuantitySelector } from "@/app/components/product/QuantitySelector"
-import { IoClose, IoCloseCircleOutline, IoRemove } from "react-icons/io5"
+import {  IoCloseCircleOutline } from "react-icons/io5"
+
+import { useEffect } from "react"
 
 
 export const ProductsInCart = () => {
   const { hasHydrated, cart, updateQuantity, removeProduct } = useCartStore();
+
+  useEffect(() => {
+    if( cart.length === 0 ) {
+        redirect('/empty')
+    }
+  }, [cart])
+  
 
   return (
      <div className="flex flex-col mt-5">

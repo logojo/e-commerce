@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useShallow } from "zustand/shallow";
 import { useCartStore } from "@/app/store/cart/cart-store";
 import { ResumenSckeleton } from "@/app/components/sckeletons/ResumenSckeleton";
+import { currencyFormat } from "@/app/utils";
 
 export const ResumenOrder = () => {
   const hasHydrated = useCartStore((state) => state.hasHydrated);
@@ -25,13 +26,13 @@ export const ResumenOrder = () => {
                     <span className="text-right">{totalProducts} artículos</span>
 
                     <span>Subtotal</span>
-                    <span className="text-right">$ {subtotal}</span>
+                    <span className="text-right">{ currencyFormat( subtotal ) }</span>
 
                     <span>Impuestos (16%)</span>
-                    <span className="text-right">$ { iva.toFixed(2) }</span>
+                    <span className="text-right">{ currencyFormat( iva ) }</span>
 
                     <span className="text-2xl mt-5">Total</span>
-                    <span className="text-right mt-5 text-2xl">$ {subtotal + iva }</span>
+                    <span className="text-right mt-5 text-2xl"> {currencyFormat( subtotal + iva ) }</span>
                 </div>
 
                 <div className="mt-5 mb-2">
