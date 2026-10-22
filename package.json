@@ -11,8 +11,10 @@
     "seed": "ts-node seed/seed-database.ts"
   },
   "dependencies": {
+    "@better-auth/prisma-adapter": "^1.7.12",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "better-auth": "^1.7.12",
     "clsx": "^2.1.1",
     "dotenv": "^18.0.5",
     "motion": "^14.3.0",
