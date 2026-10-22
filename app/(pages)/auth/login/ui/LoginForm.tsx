@@ -26,15 +26,16 @@ export default function  LoginForm() {
 const Form = () => {
  const searchParams =  useSearchParams();
  const callbackUrl = searchParams.get('callbackUrl') || '/';
- const [errorMessage, formAction, isPending] = useActionState(
+ const [status, formAction, isPending] = useActionState(
         authenticate,
         undefined,
   );
 
   useEffect(() => {
-    console.log(errorMessage);
-    
-  }, [errorMessage])
+    if ( status?.success ) {
+      window.location.replace('/');  //esto recarga la pagina y no se ve muy bonito
+    }
+  }, [status]);
   
   return (
     <form action={formAction} className="flex flex-col">
@@ -60,10 +61,10 @@ const Form = () => {
             aria-live="polite"
             aria-atomic="true"
         >
-            {errorMessage && (
+            {status?.error && (
             <>
                 <IoAlertCircle className="h-5 w-5 text-red-500" />
-                <p className="text-sm text-red-500">{errorMessage}</p>
+                <p className="text-sm text-red-500">{status?.error}</p>
             </>
             )}
         </div>

@@ -27,7 +27,6 @@ async function AuthGuard({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  console.log('session', session);
   
   if( session?.user) {
     redirect('/')

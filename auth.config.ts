@@ -10,6 +10,33 @@ export const authConfig = {
         signIn: '/auth/login',
         newUser: '/auth/new-account'
     },
+    callbacks: {
+       jwt({ token, user}) {
+            if( user ) {
+                token.data = user;
+            }
+
+            return token;
+       },
+
+       session({ session, token, user }) {
+        session.user = token.data as any;
+        
+        return session;
+       },
+       authorized({ auth, request: { nextUrl } }) {
+            const isLoggedIn = !!auth?.user;
+            
+            const isOnDashboard = nextUrl.pathname.startsWith('/');
+            if (isOnDashboard) {
+                if (isLoggedIn) return true;
+                return false; // Redirect unauthenticated users to login page
+            } else if (isLoggedIn) {
+                return Response.redirect(new URL('/', nextUrl));
+            }
+                 return true;
+        },
+    },
     providers: [
         Credentials({
             async authorize(credentials) {
@@ -28,7 +55,6 @@ export const authConfig = {
                 if( !bcryptjs.compareSync(  password, user.password )) return null;
 
                 const { password: _, ...rest } = user;
-                console.log(rest);
                 
                 return rest;
             },
@@ -36,4 +62,4 @@ export const authConfig = {
     ]
 } satisfies NextAuthConfig;
 
-export const { auth, signIn, signOut } = NextAuth( authConfig )
+export const { auth, signIn, signOut, handlers } = NextAuth( authConfig )
