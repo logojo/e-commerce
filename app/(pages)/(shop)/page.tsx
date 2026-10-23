@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Pagination, ProductGrid, ProductsSckeleton, Title } from "@/app/components";
-import { redirect } from "next/navigation";
 import { getCachedProducts } from "@/lib/products/products";
 
 interface Props {
@@ -36,9 +35,6 @@ async function Products({searchParams} : Props) {
   //tomando los productos de la funsión cacheada 
   const { products, totalPages  } = await getCachedProducts(page, take );
 
-  if( products.length === 0 ) {
-      redirect('/')
-  }
  
   return (
     <>

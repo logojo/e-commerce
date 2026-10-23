@@ -1,12 +1,29 @@
 'use client'
 
 import Link from "next/link"
+import { useRouter } from "next/navigation";
+
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline, IoShirtOutline, IoTicketOutline } from "react-icons/io5"
-import { useUIStore } from "@/app/store";
 import clsx from "clsx";
 
+import { useUIStore } from "@/app/store";
+import { authClient } from "@/lib/auth-client";
+
 export const Sidebar = () => {
+  const router = useRouter();
   const { isSideMenuOpen, handleSideMenu } = useUIStore();
+  const { data: session, isPending, error, refetch } = authClient.useSession() 
+
+  const onLogout = async() => {
+    await authClient.signOut({
+        fetchOptions: {
+            onSuccess: () => {
+                router.push("/"); // redirect to login page
+                handleSideMenu();
+            },
+        },
+    });
+  }
 
   return (
     <div> 
@@ -69,25 +86,39 @@ export const Sidebar = () => {
                 />
             </div>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoPersonOutline size={18} />
-                <span>Perfil</span>
-            </Link>
+            {
+                session ? (
+                    <>
+                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoPersonOutline size={18} />
+                            <span>Perfil</span>
+                        </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoTicketOutline size={18} />
-                <span>Ordenes</span>
-            </Link>
+                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoTicketOutline size={18} />
+                            <span>Ordenes</span>
+                        </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoLogInOutline size={18} />
-                <span>Ingresar</span>
-            </Link>
+                        <button onClick={onLogout} className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoLogOutOutline size={18} />
+                            <span>Salir</span>
+                        </button>
+                    
+                    </>
+                ) : (
+                    <Link href='/auth/login' className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                        <IoLogInOutline size={18} />
+                        <span>Ingresar</span>
+                    </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoLogOutOutline size={18} />
-                <span>Salir</span>
-            </Link>
+                )
+            }
+
+     
+
+
+            
+            
 
             <div  className="w-full h-px bg-gray-200 my-10"/>
 
