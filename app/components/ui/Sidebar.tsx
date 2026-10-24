@@ -89,7 +89,9 @@ export const Sidebar = () => {
             {
                 session ? (
                     <>
-                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                        <Link href="/profile" 
+                              onClick={handleSideMenu}
+                              className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                             <IoPersonOutline size={18} />
                             <span>Perfil</span>
                         </Link>

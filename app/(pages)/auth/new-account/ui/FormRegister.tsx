@@ -21,7 +21,7 @@ const FormRegister = () => {
                 email, // user email address
                 password, // user password -> min 8 characters by default
                 name, // user display name
-                callbackURL: "/auth/verify-email" // A URL to redirect to after the user verifies their email (optional)
+                callbackURL: "/" // A URL to redirect to after the user verifies their email (optional)
             }, {
                 onRequest: (ctx) => {
                    handleloading()

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { IoArrowBack, IoMailOpen, IoShieldCheckmark } from "react-icons/io5";
+import { IoArrowBack, IoMailOpen } from "react-icons/io5";
 
 export default function () {
     return (
@@ -106,7 +106,7 @@ export default function () {
 
           <div className="mt-8 border-t border-zinc-100 pt-6 text-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition hover:text-zinc-950"
             >
               <IoArrowBack size={16} />

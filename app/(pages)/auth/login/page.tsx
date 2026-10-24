@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import LoginForm from "./ui/LoginForm";
+import Loading from "@/app/loading";
 
 
 export default function () {
@@ -7,7 +9,9 @@ export default function () {
      
        <h1 className="font-title text-4xl mb-5">Ingresar</h1>
 
-      <LoginForm />
+      <Suspense fallback={<Loading />}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }

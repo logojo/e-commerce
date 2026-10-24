@@ -1,13 +1,17 @@
 'use client'
+
 import type { SubmitEvent } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 import { authClient } from '@/lib/auth-client'
 import { useUIStore } from '@/app/store'
-import { useState } from 'react';
 
 const LoginForm = () => {
+    const searchParams = useSearchParams();
     const { loading, error, handleloading, handleError } = useUIStore();
+
+    const callbackUrl = searchParams.get("callbackUrl");
 
     const handleSubmit = async(event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -15,10 +19,18 @@ const LoginForm = () => {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
+        // Validamos que el destino sea una ruta interna segura.
+      const redirectTo =
+        callbackUrl?.startsWith("/") &&
+        !callbackUrl.startsWith("//") &&
+        !callbackUrl.includes("\\")
+          ? callbackUrl
+          : "/";
+
         const { data, error } = await authClient.signIn.email({
             email, // user email address
             password, // user password -> min 8 characters by default
-            callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+            callbackURL: redirectTo,// A URL to redirect to after the user verifies their email (optional)
             rememberMe: false
         }, {
             onRequest: (ctx) => {
