@@ -115,29 +115,33 @@ export const Sidebar = () => {
 
                 )
             }
-
-     
-
-
             
-            
-
             <div  className="w-full h-px bg-gray-200 my-10"/>
+            {
+                session?.user.role == 'admin' && (
+                    <>
+                    
+                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoShirtOutline size={18} />
+                            <span>Productos</span>
+                        </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoShirtOutline size={18} />
-                <span>Productos</span>
-            </Link>
+                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoTicketOutline size={18} />
+                            <span>Ordenes</span>
+                        </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoTicketOutline size={18} />
-                <span>Ordenes</span>
-            </Link>
+                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoPeopleOutline size={18} />
+                            <span>Usuarios</span>
+                        </Link>
 
-            <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                <IoPeopleOutline size={18} />
-                <span>Usuarios</span>
-            </Link>
+                    </>
+                )
+            
+            }
+            
+
       </nav>
 
 

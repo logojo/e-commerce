@@ -1,13 +1,14 @@
 'use client'
 
 import type { SubmitEvent } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 import { authClient } from '@/lib/auth-client'
 import { useUIStore } from '@/app/store'
 
 const LoginForm = () => {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const { loading, error, handleloading, handleError } = useUIStore();
 
@@ -43,6 +44,12 @@ const LoginForm = () => {
                 //redirect to the dashboard or sign in page
             },
             onError: (ctx) => {
+              
+              
+               if( ctx.error.status === 403 ) {
+                   router.push('/auth/verify-email')
+               }
+              
                 // display the error message
                 handleloading()
                 handleError(ctx.error.message);

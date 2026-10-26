@@ -1,4 +1,6 @@
 import { betterAuth } from "better-auth";
+import { admin } from "better-auth/plugins";
+
 import { prisma } from "./prisma";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
@@ -13,6 +15,7 @@ export const auth = betterAuth({
         requireEmailVerification: true 
     }, 
     emailVerification: {
+        
 		sendVerificationEmail: async ({ user, url, token }) => {
             console.log('Send verification Email:', { user, url, token });
 			// Send verification email to user
@@ -22,9 +25,15 @@ export const auth = betterAuth({
                 url,
             });
 		},
+        sendOnSignIn: true,
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
 		expiresIn: 60 * 60,
 	},
+    plugins: [
+        admin({
+            defaultRole: "user",
+        }),
+    ],
 
 });
