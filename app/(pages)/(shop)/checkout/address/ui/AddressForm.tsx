@@ -1,6 +1,18 @@
 'use client'
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation';
+
+import { Country } from '@/generated/prisma/client';
+
+import { deleteUserAddress, setUserAddress } from '@/app/actions/address/set-user-address';
+import { useAddresStore } from '@/app/store/address/address-store';
+
+import type { Address } from '@/app/interfaces';
+import { User } from 'better-auth';
+import Loading from '@/app/loading';
+import { Loader } from '@/app/components/ui/Loader';
 
 type FormInputs = {
     firstName:     string;
@@ -11,22 +23,61 @@ type FormInputs = {
     city:          string;
     country:       string;
     phone:         string;
-    remeberAddres: boolean;
+    remeberAddress?: boolean;
 
 }
 
-export const AddressForm = () => {
+interface Props {
+    countries: Country[];
+    user: User 
+    userAddress?: Partial<Address>;
+}
 
-  const { handleSubmit, register, formState: { errors, isValid, isSubmitted} } = useForm<FormInputs>({
-    defaultValues: {
-        //todo: leer de la base de datos
-    },
-  });
+export const AddressForm = ({countries, user, userAddress = {}} : Props) => {
+    const router = useRouter();
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+    const { handleSubmit, register, formState: { errors, isSubmitting }, reset } = useForm<FormInputs>({
+        defaultValues: { 
+            ...userAddress,
+            remeberAddress: false
+        },
+    });
     
-  }
+    const { deliverInfo, setDeliverInfo } = useAddresStore();
+
+
+    const onSubmit = async( data: FormInputs ) => {
+        const { remeberAddress, ...rest } = data;
+        setDeliverInfo(rest);
+
+        if( remeberAddress ) {
+            await setUserAddress(data, user.id)  
+        }else {
+            await deleteUserAddress( user.id );
+        }
+
+
+        router.push('/checkout')
+    }
+
+    // const onSaveAddress = async( remember: boolean) => {
+        
+    //     if( remember ) {
+              //* getValues() es una función de useForm para obtener los valores actuales del form
+    //         await setUserAddress(getValues(), user.id)
+    //         return;
+    //     }
+
+    //     await deleteUserAddress(  user.id );
+    // }
+
+
+  useEffect(() => {
+      if( deliverInfo.firstName ) {
+          reset(deliverInfo)
+      }
+  }, [deliverInfo])
+  
 
   return (
     <form onSubmit={handleSubmit( onSubmit )} className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
@@ -98,7 +149,11 @@ export const AddressForm = () => {
              {...register("country", { required: "country is required" }) }
             >
             <option value="">[ Seleccione ]</option>
-            <option value="CRI">Costa Rica</option>
+            {
+                countries.map(country => (
+                     <option key={country.id} value={ country.id }>{country.name}</option>
+                ))
+            }
             </select>
             {errors.country && <span className="text-rose-700 text-xs">{errors.country.message}</span>}
         </div>
@@ -123,7 +178,8 @@ export const AddressForm = () => {
                         type="checkbox"
                         className=" border-gray-500 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
                         id="checkbox"    
-                        {...register("remeberAddres",) }                
+                        {...register("remeberAddress",) }  
+                        // onChange={(event) => onSaveAddress(event.target.checked)}       
                     />
                     <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                         <svg
@@ -151,10 +207,12 @@ export const AddressForm = () => {
         <div className="col-span-1 sm:col-span-2  mb-2 sm:mt-10">
             <button 
              type='submit'
-             className="btn-primary flex w-full sm:w-1/2 justify-center active:scale-95 "
-             disabled={isSubmitted}
+             className="btn-primary flex items-center gap-2 w-full sm:w-1/2 justify-center active:scale-95 "
+             disabled={isSubmitting}
             >
-            {isSubmitted ? 'Siguiente' : 'Enviando...'}
+            { isSubmitting && <Loader />
+            }
+             <span>Siguiente</span>
             </button>
         </div>
 

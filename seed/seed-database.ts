@@ -1,14 +1,16 @@
 import { initialData } from "./seeder.ts";
 import { prisma }  from   '../lib/prisma.ts'
+import { countries } from "./seed-countries.ts";
 
 async function main() {
     //1. Borrar registros previos
     
     await prisma.productImage.deleteMany();
-    await prisma.product.deleteMany();
     await prisma.category.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.country.deleteMany();
     
-
+    
     const {categories, products }  = initialData;
 
     const categoriesData = categories.map( category => ({
@@ -41,6 +43,11 @@ async function main() {
         await prisma.productImage.createMany({
             data: imagesData
         })
+    })
+
+
+    await prisma.country.createMany({
+        data: countries
     })
 
     // const productData = products.map( ({images, type, ...product}) => ({

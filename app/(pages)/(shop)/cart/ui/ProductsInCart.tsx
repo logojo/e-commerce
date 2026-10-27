@@ -16,10 +16,11 @@ export const ProductsInCart = () => {
   const { hasHydrated, cart, updateQuantity, removeProduct } = useCartStore();
 
   useEffect(() => {
-    if( cart.length === 0 ) {
+    
+    if( cart.length === 0 && hasHydrated) {
         redirect('/empty')
     }
-  }, [cart])
+  }, [cart, hasHydrated])
   
 
   return (

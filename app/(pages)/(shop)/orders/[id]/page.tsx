@@ -1,17 +1,11 @@
-import Link from "next/link";
-import Image from "next/image";
-
+import { Suspense } from "react";
 import { OrderSkeleton, Title } from "@/app/components";
-import { initialData } from "@/seed/seeder";
 import clsx from "clsx";
 import { IoCardOutline } from "react-icons/io5";
-import { Suspense } from "react";
 
-const productsInCart = [
-    initialData.products[0],
-    initialData.products[1],
-    initialData.products[2],
-]
+import { ProductsToBuy } from "@/app/components/sale/ProductsToBuy";
+import { DeliverAddress } from "@/app/components/sale/DeliverAddress";
+import { OrderResume } from "@/app/components/sale/OrderResume";
 
 
 interface Props {
@@ -62,61 +56,16 @@ async function Orden({ params } : Props ) {
           </div>
         
 
-          {
-            productsInCart.map( product => (
-              <div key={ product.slug } className="flex mb-5">
-                <Image 
-                  src={`/products/${product.images[0]}`}
-                  alt={product.title}
-                  width={100}
-                  height={100}
-                  loading="eager"
-                  className="mr-5 rounded"
-                  style={{
-                    width: '100px',
-                    height: '100px'
-                  }}
-                />
-
-                <div>
-                  <p>{ product.title }</p>
-                  <p>${ product.price.toFixed(2) } x 3</p>
-                  <p>subtotal: $ { product.price * 3} </p>
-                </div>
-
-              </div>
-            ))
-          }
+          <ProductsToBuy />
         </div>
 
         {/* Checkout - Resumen de la orden */}
         <div className="rounded-xl shadow-xl p-7">
-          <h2 className="text-xl mb-2">Dirección de entrega</h2>
-          <div className="mb-10 flex flex-col">
-              <span className="text-lg font-bold">Joel Flores</span>
-              <span>Calle del Silencio # 29 K</span>
-              <span>Col. Centro</span>
-              <span>CP: 98616</span>
-              <span>Guadalupe, Zacatecas</span>
-              <span>492-116-7655</span>
-          </div>
+          <DeliverAddress />
 
-          <div className="w-full h-0.5 rounded bg-gray-100 mb-10" />
+          <div className="w-full h-0.5 rounded bg-gray-100 my-10" />
 
-          <h2 className="text-xl mb-2">Resumen de la orden</h2>
-          <div className="grid grid-cols-2">
-              <span>No. Productos</span>
-              <span className="text-right">3 artículos</span>
-
-              <span>Subtotal</span>
-              <span className="text-right">$ 100</span>
-
-              <span>Impuestos (16%)</span>
-              <span className="text-right">$ 16</span>
-
-              <span className="text-2xl mt-5">Total</span>
-              <span className="text-right mt-5 text-2xl">$ 116</span>
-          </div>
+          <OrderResume />
 
           <div className="mt-5 mb-2">  
 
