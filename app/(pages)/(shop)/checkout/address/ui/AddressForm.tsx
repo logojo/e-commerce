@@ -11,7 +11,6 @@ import { useAddresStore } from '@/app/store/address/address-store';
 
 import type { Address } from '@/app/interfaces';
 import { User } from 'better-auth';
-import Loading from '@/app/loading';
 import { Loader } from '@/app/components/ui/Loader';
 
 type FormInputs = {
@@ -30,7 +29,7 @@ type FormInputs = {
 interface Props {
     countries: Country[];
     user: User 
-    userAddress?: Partial<Address>;
+    userAddress?: Partial<Address>
 }
 
 export const AddressForm = ({countries, user, userAddress = {}} : Props) => {
@@ -48,6 +47,8 @@ export const AddressForm = ({countries, user, userAddress = {}} : Props) => {
 
     const onSubmit = async( data: FormInputs ) => {
         const { remeberAddress, ...rest } = data;
+        console.log('rest', rest);
+        
         setDeliverInfo(rest);
 
         if( remeberAddress ) {

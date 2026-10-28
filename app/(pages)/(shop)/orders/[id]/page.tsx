@@ -3,9 +3,11 @@ import { OrderSkeleton, Title } from "@/app/components";
 import clsx from "clsx";
 import { IoCardOutline } from "react-icons/io5";
 
-import { ProductsToBuy } from "@/app/components/sale/ProductsToBuy";
-import { DeliverAddress } from "@/app/components/sale/DeliverAddress";
-import { OrderResume } from "@/app/components/sale/OrderResume";
+import { getOrder } from "@/app/actions/order/get-order";
+import { redirect } from "next/navigation";
+import { ProductsToOrder } from "./ui/ProductsToOrder";
+import { DeliverInfo } from "./ui/DeliverInfo";
+
 
 
 interface Props {
@@ -29,9 +31,36 @@ export default async function({ params } : Props ) {
 
 async function Orden({ params } : Props ) {
   const { id } = await params;
+  const res = await getOrder( id );
 
-  // todo: verificar usuario orden etc
-  // redirect();
+  if( !res ) {
+     redirect('/');
+  }
+  
+ const { OrderAddress, OrderItem, ...order } = res;
+
+ const products = OrderItem.map( item => ({
+      id: item.id,
+      slug: item.product.slug,
+      title: item.product.title,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      image: item.product.productImages[0].url,
+ }))
+
+ const address = {
+    firstName:     OrderAddress!.firstName,
+    lastName:      OrderAddress!.lastName,
+    address:       OrderAddress!.address,
+    address2:      OrderAddress?.address2 ?? '',
+    postalCode:    OrderAddress!.postalCode,
+    city:          OrderAddress!.city,
+    country:       OrderAddress!.countryId,
+    phone:         OrderAddress!.phone,
+ }
+  
+
 
   return (
     <>
@@ -45,27 +74,28 @@ async function Orden({ params } : Props ) {
             clsx(
               "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
               {
-                'bg-amber-600' : false,
-                'bg-green-600' : true
+                'bg-amber-600' : !order.isPaid,
+                'bg-green-600' : order.isPaid 
               }
             )
           }>
             <IoCardOutline  size={30}/>
-            {/* <span className="mx-2">Pendiente de pago</span> */}
-            <span className="mx-2">Pagada</span>
+            {
+              order.isPaid 
+              ? (<span className="mx-2">Pagada</span>)
+              : (<span className="mx-2">Pendiente de pago</span>)
+            }
+            
+            
           </div>
         
 
-          <ProductsToBuy />
+          <ProductsToOrder products={products} />
         </div>
 
         {/* Checkout - Resumen de la orden */}
         <div className="rounded-xl shadow-xl p-7">
-          <DeliverAddress />
-
-          <div className="w-full h-0.5 rounded bg-gray-100 my-10" />
-
-          <OrderResume />
+         
 
           <div className="mt-5 mb-2">  
 
@@ -73,17 +103,28 @@ async function Orden({ params } : Props ) {
               clsx(
                 "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
                 {
-                  'bg-amber-600' : false,
-                  'bg-green-600' : true
+                  'bg-amber-600' : !order.isPaid ,
+                  'bg-green-600' : order.isPaid 
                 }
               )
             }>
               <IoCardOutline  size={30}/>
-              {/* <span className="mx-2">Pendiente de pago</span> */}
-              <span className="mx-2">Pagada</span>
+              {
+                order.isPaid 
+                ? (<span className="mx-2">Pagada</span>)
+                : (<span className="mx-2">Pendiente de pago</span>)
+              }
             </div> 
             
           </div>
+
+          <DeliverInfo
+            deliverInfo={address}
+            iva={order.tax}
+            subtotal={order.subTotal}
+            totalProducts={order.itemsInOrder}
+            total={order.total}
+          />
         </div>
 
       </div>

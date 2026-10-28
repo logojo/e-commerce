@@ -8,17 +8,22 @@ import { useCartStore } from "@/app/store/cart/cart-store";
 import { useAddresStore } from "@/app/store/address/address-store";
 import { currencyFormat } from "@/app/utils";
 
+import { placeOrder } from "@/app/actions/order/place-order";
+
 import { ResumenSckeleton } from "@/app/components/sckeletons/ResumenSckeleton";
 import { Loader } from "../ui/Loader";
 import { DeliverAddress } from "./DeliverAddress";
+import { useRouter } from "next/navigation";
 
 export const OrderResume = () => {
+ 
  const { hasHydrated: hasHydratedAddress, deliverInfo } = useAddresStore();
- const { hasHydrated, cart } = useCartStore();
+ const { hasHydrated, cart, clearCart } = useCartStore();
  const {totalProducts, subtotal, iva } = useCartStore(useShallow((state) => state.getResumenCart()));
- const { loading, handleloading } = useUIStore()
+ const { loading, handleloading, error, handleError } = useUIStore()
+ const router = useRouter();
 
- const onPlaceOrder = () => {
+ const onPlaceOrder = async() => {
   handleloading()
   
   const productsToOrder = cart.map(item => ({
@@ -27,9 +32,19 @@ export const OrderResume = () => {
     size: item.size
   }));
 
-  console.log(productsToOrder, deliverInfo);
-  
-  
+  const res = await placeOrder(productsToOrder, deliverInfo );
+
+  if( !res.ok ) {
+      handleError( res.message );
+      handleloading();
+      return;
+  }
+
+  handleloading();
+  handleError( null );
+  clearCart();
+  router.replace(`/orders/${res.order!.id}`)
+
  }
 
  return (
@@ -69,7 +84,11 @@ export const OrderResume = () => {
                     </span>
                   </p>
                   
-                  <span className="text-red-500 text-sm fade-in">Error al realizar el pedido</span>
+                  {
+                    error && (
+                      <span className="text-red-500 text-sm fade-in">{ error }</span>
+                    )
+                  }
                   {/* //href="/orders/123" */}
                   <button className={
                     clsx(

@@ -13,6 +13,7 @@ interface State {
             iva: number;
         };
     removeProduct: (product: CartProduct) => void;
+    clearCart: () => void;
     setHasHydrated: (value: boolean) => void;
 }
 
@@ -83,7 +84,8 @@ export const useCartStore = create<State>()(
                         const updateProducts = cart.filter( (item) =>  item.id !== product.id || item.size !== product.size ) 
 
                         set({ cart: updateProducts })
-                    },       
+                    },  
+                    clearCart: () => set({cart: []}),     
                     setHasHydrated: (value) => {
                         set({ hasHydrated: value });
                     },            

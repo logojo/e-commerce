@@ -4,12 +4,16 @@ import { countries } from "./seed-countries.ts";
 
 async function main() {
     //1. Borrar registros previos
-    
+    await prisma.orderAddress.deleteMany();
+    await prisma.orderItem.deleteMany();
+    await prisma.order.deleteMany();
+
+    await prisma.userAddress.deleteMany();
+    await prisma.country.deleteMany();
+
     await prisma.productImage.deleteMany();
     await prisma.category.deleteMany();
     await prisma.product.deleteMany();
-    await prisma.country.deleteMany();
-    
     
     const {categories, products }  = initialData;
 

@@ -41,6 +41,7 @@ const CheckoutView = async() => {
 
   const countries = await getCountries();
   const address = await getUserAddres(session.user.id) ?? undefined;
+ 
 
   return (
     <div>

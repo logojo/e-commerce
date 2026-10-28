@@ -12,7 +12,8 @@ export const getUserAddres = async( userId : string ) => {
 
         if( !address ) return null;
 
-        const { countryId, address2, ...rest} = address;
+        //extrayendo todas las proieddades de address que no son necesarias
+        const { countryId, userId: user, address2, ...rest} = address;
 
 
         return {
