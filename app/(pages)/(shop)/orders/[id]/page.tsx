@@ -37,34 +37,11 @@ async function Orden({ params } : Props ) {
      redirect('/');
   }
   
- const { OrderAddress, OrderItem, ...order } = res;
-
- const products = OrderItem.map( item => ({
-      id: item.id,
-      slug: item.product.slug,
-      title: item.product.title,
-      price: item.price,
-      quantity: item.quantity,
-      size: item.size,
-      image: item.product.productImages[0].url,
- }))
-
- const address = {
-    firstName:     OrderAddress!.firstName,
-    lastName:      OrderAddress!.lastName,
-    address:       OrderAddress!.address,
-    address2:      OrderAddress?.address2 ?? '',
-    postalCode:    OrderAddress!.postalCode,
-    city:          OrderAddress!.city,
-    country:       OrderAddress!.countryId,
-    phone:         OrderAddress!.phone,
- }
-  
-
+ const { products, address, order } = res;
 
   return (
     <>
-      <Title title={`Orden #${ id }`} />
+      <Title title={`Orden #${ id.split('-').at(-1) }`} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 items-start gap-10">
         

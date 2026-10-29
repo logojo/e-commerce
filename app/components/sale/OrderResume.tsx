@@ -24,26 +24,26 @@ export const OrderResume = () => {
  const router = useRouter();
 
  const onPlaceOrder = async() => {
-  handleloading()
-  
-  const productsToOrder = cart.map(item => ({
-    productId: item.id,
-    quantity: item.quantity,
-    size: item.size
-  }));
+    handleloading()
+    
+    const productsToOrder = cart.map(item => ({
+      productId: item.id,
+      quantity: item.quantity,
+      size: item.size
+    }));
 
-  const res = await placeOrder(productsToOrder, deliverInfo );
+    const res = await placeOrder(productsToOrder, deliverInfo );
 
-  if( !res.ok ) {
-      handleError( res.message );
-      handleloading();
-      return;
-  }
+    if( !res.ok ) {
+        handleError( res.message );
+        handleloading();
+        return;
+    }
 
-  handleloading();
-  handleError( null );
-  clearCart();
-  router.replace(`/orders/${res.order!.id}`)
+    handleloading();
+    handleError( null );
+    clearCart();
+    router.replace(`/orders/${res.order!.id}`)
 
  }
 

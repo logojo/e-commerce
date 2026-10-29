@@ -89,9 +89,11 @@ export const placeOrder = async( pendingOrder : ProductToOrder[], address: Addre
             })
 
             const updatedProducts = await Promise.all( updatedProductsPromises );
+           
+            
 
             //comprobando si existen inStock negativo
-            updatedProducts.forEach( product => {
+            updatedProducts.forEach( product => {                
                 if( product.inStock < 0 ) {
                     throw new Error(`${product.title}  no tiene suficiente existencia`) ;
                 }

@@ -21,10 +21,9 @@ export const DeliverInfo = ({ deliverInfo, totalProducts, subtotal, iva, total }
             
         <div className="w-full h-0.5 rounded bg-gray-100 my-10" />
     
-         
         <div className="grid grid-cols-2">
             <span>No. Productos</span>
-            <span className="text-right">{totalProducts} artículos</span>
+            <span className="text-right">{totalProducts} {totalProducts > 1 ? 'artículos' :  'artículo'}</span>
 
             <span>Subtotal</span>
             <span className="text-right">{ currencyFormat( subtotal ) }</span>
