@@ -2,17 +2,18 @@ import { DeliverAddress } from '@/app/components/sale/DeliverAddress'
 import { Loader } from '@/app/components/ui/Loader';
 import { Address } from '@/app/interfaces';
 import { currencyFormat } from '@/app/utils';
-import clsx from 'clsx';
+import PayPalCheckout from './PayPalCheckout';
 
 
 interface Props {
+ orderId: string
  deliverInfo: Address;
  totalProducts: number;
  subtotal: number;
  iva: number;
  total: number
 }
-export const DeliverInfo = ({ deliverInfo, totalProducts, subtotal, iva, total } : Props) => {
+export const DeliverInfo = ({ orderId, deliverInfo, totalProducts, subtotal, iva, total } : Props) => {
   const  loading = false;
   return (
     <div>
@@ -36,8 +37,8 @@ export const DeliverInfo = ({ deliverInfo, totalProducts, subtotal, iva, total }
         </div>
     
         <div className="mt-5 mb-2">
-            
-            <button className={
+            <PayPalCheckout orderId={orderId}/>
+            {/* <button className={
                     clsx(
                         "w-full flex items-center gap-2 btn-primary justify-center ", {
                         "cursor-pointer active:scale-90": !loading
@@ -48,7 +49,7 @@ export const DeliverInfo = ({ deliverInfo, totalProducts, subtotal, iva, total }
             >
                     { loading && <Loader />}
                     Realizar Pago
-            </button>
+            </button> */}
         </div>
                   
         </div>
