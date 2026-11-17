@@ -12,8 +12,8 @@ async function main() {
     await prisma.country.deleteMany();
 
     await prisma.productImage.deleteMany();
-    await prisma.category.deleteMany();
     await prisma.product.deleteMany();
+    await prisma.category.deleteMany();
     
     const {categories, products }  = initialData;
 

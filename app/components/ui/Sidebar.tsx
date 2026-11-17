@@ -7,7 +7,7 @@ import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPer
 import clsx from "clsx";
 
 import { useUIStore } from "@/app/store";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 
 export const Sidebar = () => {
   const router = useRouter();
@@ -123,17 +123,16 @@ export const Sidebar = () => {
                 session?.user.role == 'admin' && (
                     <>
                     
-                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                        <Link href="/products"
+                              onClick={handleSideMenu} 
+                              className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                             <IoShirtOutline size={18} />
                             <span>Productos</span>
                         </Link>
 
-                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                            <IoTicketOutline size={18} />
-                            <span>Ordenes</span>
-                        </Link>
-
-                        <Link href="/" className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                        <Link href="/users"  
+                              onClick={handleSideMenu}
+                              className="flex items-center gap-2 mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                             <IoPeopleOutline size={18} />
                             <span>Usuarios</span>
                         </Link>

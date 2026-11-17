@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { PayPalOrderResponse } from "@/app/interfaces/paypal.interface";
+
 const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
@@ -14,30 +16,6 @@ if (!clientId || !clientSecret) {
   throw new Error("Faltan las credenciales de PayPal");
 }
 
-type PayPalCapture = {
-  id?: string;
-  status?: string;
-  custom_id?: string;
-  amount?: {
-    currency_code?: string;
-    value?: string;
-  };
-};
-
-type PayPalOrderResponse = {
-  id: string;
-  status: string;
-  purchase_units?: Array<{
-    custom_id?: string;
-    amount?: {
-      currency_code?: string;
-      value?: string;
-    };
-    payments?: {
-      captures?: PayPalCapture[];
-    };
-  }>;
-};
 
 async function getAccessToken(): Promise<string> {
   const credentials = Buffer.from(
@@ -98,7 +76,6 @@ async function paypalRequest<T>(
       body: errorBody,
     });
 
-    // No devuelvas tokens ni credenciales al cliente.
     throw new Error(`PayPal respondió con HTTP ${response.status}`);
   }
 

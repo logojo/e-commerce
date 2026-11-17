@@ -1,7 +1,7 @@
 
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/auth';
 import { getCountries } from '@/app/actions/country/get-country';
 import { getUserAddres } from '@/app/actions/address/get-user-address';
 

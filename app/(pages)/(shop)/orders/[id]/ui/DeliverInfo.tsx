@@ -46,6 +46,6 @@ export const DeliverInfo = ({ order, deliverInfo, totalProducts, subtotal, iva, 
            
         </div>
                   
-        </div>
+    </div>
   )
 }

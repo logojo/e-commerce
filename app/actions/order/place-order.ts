@@ -1,7 +1,7 @@
 'use server'
 
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 
 import type { Address, ValidSizes } from "@/app/interfaces";
 import { prisma } from "@/lib/prisma";

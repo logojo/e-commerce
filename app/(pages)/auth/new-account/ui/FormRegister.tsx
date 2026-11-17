@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { authClient } from '@/lib/auth-client';
+import { authClient } from '@/lib/auth/auth-client';
 import { useUIStore } from "@/app/store";
 import clsx from 'clsx';
 

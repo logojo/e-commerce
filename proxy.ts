@@ -20,9 +20,11 @@ export function proxy(request: NextRequest) {
 
   // 2. Define exclusivamente las rutas privadas.
   const protectedRoutes = [
+    "/products",
     "/checkout",
     "/profile",
     "/orders",
+    "/users",
   ];
 
   const isProtectedRoute = protectedRoutes.some(
@@ -46,6 +48,8 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/auth/login",
+    "/products/:path*",
+    "/users/:path*",
     "/checkout/:path*",
     "/profile/:path*",
     "/orders/:path*",

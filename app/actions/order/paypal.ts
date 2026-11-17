@@ -1,4 +1,5 @@
 "use server";
+
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
@@ -8,20 +9,22 @@ import {
   getPayPalOrder,
   paypalCurrency,
 } from "@/lib/paypal/rest";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
+import { revalidatePath } from "next/cache";
 
 export async function createPayment(orderId: string) {
   const session = await auth.api.getSession({
       headers: await headers() 
-  })
+  });
+
   const userId = session?.user?.id;
 
-  if (!userId) {
+  if ( !userId ) {
     throw new Error("Debes iniciar sesión");
   }
 
-  if (typeof orderId !== "string" || orderId.length > 100) {
-    throw new Error("Pedido no válido");
+  if ( typeof orderId !== "string" || orderId.length > 100) {
+       throw new Error("Pedido no válido");
   }
 
   const order = await prisma.order.findFirst({
@@ -38,26 +41,53 @@ export async function createPayment(orderId: string) {
     },
   });
 
-  if (!order) {
+  if ( !order ) {
     throw new Error("Pedido no encontrado");
   }
 
-  if (order.isPaid) {
+  if ( order.isPaid ) {
     throw new Error("Este pedido ya está pagado");
   }
 
-  if (order.proveedor && order.proveedor !== "PayPal") {
+  if ( order.proveedor && order.proveedor !== "PayPal" ) {
     throw new Error("El pedido tiene otro proveedor de pago");
   }
 
   // Reutiliza el intento existente en lugar de crear órdenes duplicadas.
-  if (order.transactionId) {
-    if (order.proveedor !== "PayPal") {
+  if ( order.transactionId ) {
+    if ( order.proveedor !== "PayPal" ) {
       throw new Error("El proveedor del pedido no coincide");
     }
 
     const existing = await getPayPalOrder(order.transactionId);
+
+    const  purchaseUnit = existing.purchase_units?.[0];
+
+    const  capture = purchaseUnit?.payments?.captures?.find(
+      (item) => item.status === "COMPLETED"
+    );
+
     
+    //verificando si en paypal ya quedo pagado  y actualizando el pedido en nuestra db si no esta marcado como pagado
+    if( existing.status === 'COMPLETED' && existing.id === order.transactionId && capture?.status === 'COMPLETED'  ) {
+         await prisma.order.updateMany({
+              where: {
+                id: order.id,
+                userId,
+                isPaid: false,
+                transactionId: existing.id,
+                proveedor: "PayPal",
+              },
+              data: {
+                isPaid: true,
+                paidAt: new Date(),
+                captureId: capture!.id, // id de pago de paypal
+              },
+            });
+
+        return { orderId: existing.id };
+    }
+  
     if (
       existing.id !== order.transactionId ||
       existing.purchase_units?.[0]?.custom_id !== order.id ||
@@ -82,8 +112,8 @@ export async function createPayment(orderId: string) {
     amount,
   });
 
-  if (paypalOrder.status !== "CREATED" || !paypalOrder.id) {
-    throw new Error("No se pudo crear la orden en PayPal");
+  if ( paypalOrder.status !== "CREATED" || !paypalOrder.id ) {
+       throw new Error("No se pudo crear la orden en PayPal");
   }
 
   // Vincula el pedido a PayPal sin sobrescribir cambios concurrentes.
@@ -160,17 +190,17 @@ export async function capturePayment(paypalOrderId: string) {
   let paypalOrder = await getPayPalOrder(paypalOrderId);
   
 
-  if (paypalOrder.id !== paypalOrderId) {
-    throw new Error("La orden devuelta por PayPal no coincide");
+  if ( paypalOrder.id !== paypalOrderId ) {
+       throw new Error("La orden devuelta por PayPal no coincide");
   }
 
-  if (paypalOrder.status !== "COMPLETED") {
-    if (paypalOrder.status !== "APPROVED") {
-      throw new Error("La orden todavía no está aprobada para captura");
+  if ( paypalOrder.status !== "COMPLETED" ) {
+    if ( paypalOrder.status !== "APPROVED" ) {
+         throw new Error("La orden todavía no está aprobada para captura");
     }
 
     try {
-      console.log("Iniciando captura:", paypalOrderId);
+    
 
       paypalOrder = await capturePayPalOrder(
         paypalOrderId,
@@ -191,7 +221,7 @@ export async function capturePayment(paypalOrderId: string) {
 
       // Recuperación: comprobar si PayPal completó
       // la captura a pesar del error de comunicación.
-      paypalOrder = await getPayPalOrder(paypalOrderId);"Iniciando captura:"
+      paypalOrder = await getPayPalOrder(paypalOrderId);
 
       console.log(
         "Estado recuperado:",
@@ -226,11 +256,8 @@ export async function capturePayment(paypalOrderId: string) {
     captureId: capture?.id,
   };
 
-  console.log(
-    "VALIDACIÓN PAYPAL:",
-    JSON.stringify(validation, null, 2)
-  );
-
+  console.log(validation);
+  
   if (
     paypalOrder.status !== "COMPLETED" ||
     paypalOrder.id !== paypalOrderId ||
@@ -275,6 +302,8 @@ export async function capturePayment(paypalOrderId: string) {
       );
     }
   }
+
+  revalidatePath(`/orders/${order.id}`)
 
   return { success: true };
 }

@@ -66,6 +66,7 @@ const PayPalButton = ({
 
             try {
             await capturePayment(paypalOrderId);
+            
             setPaid(true);
             } catch(e) {
               console.log(e);
@@ -74,7 +75,7 @@ const PayPalButton = ({
                 "No pudimos confirmar el pago. No vuelvas a pagar sin verificar primero el estado de tu pedido."
             );
             } finally {
-            setProcessing(false);
+             setProcessing(false);
             }
         }}
         onCancel={() => {
