@@ -34,7 +34,7 @@ export const getPaginatedProductsWithImages = async({ page = 1, take = 12, gende
                     productImages: { //consulta con relación
                         take: 2,
                         select: { //campos que quiero traer de la tabla relacionada
-                            url: true
+                            url: true,
                         }
                     }
                 },                

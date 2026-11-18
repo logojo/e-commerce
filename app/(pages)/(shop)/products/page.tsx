@@ -24,7 +24,7 @@ export default async function({ searchParams }: Props) {
       <Title title="Products" />
 
       <div className='flex justify-end mb-5'>
-        <Link href='/' className='btn-primary'>
+        <Link href='/products/new' className='btn-primary'>
           Nuevo producto
         </Link>
       </div>

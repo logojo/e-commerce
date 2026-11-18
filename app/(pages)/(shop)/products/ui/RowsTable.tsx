@@ -19,25 +19,25 @@ const RowsTable = ({ products } : Props ) => {
              <table className="min-w-full">
                <thead className="bg-gray-200 border-b border-b-gray-400">
                  <tr>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Imagen
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      ID
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Título
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Genero
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Stock
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Precio
                    </th>
-                   <th scope="col" className="text-sm font-medium py-4 text-gray-900  text-left">
+                   <th scope="col" className="text-sm font-medium py-4 px-3 text-gray-900  text-left">
                      Tallas
                    </th>
                  </tr>
@@ -73,7 +73,9 @@ const RowsTable = ({ products } : Props ) => {
                         </td>
                         <td className=" whitespace-nowrap text-sm font-medium text-gray-900">{ product.id.split('-').at(-1) }</td>
                         <td className="text-sm text-gray-900 font-light  whitespace-nowrap">
-                        { product.title }
+                        <Link href={`/products/${product.slug}`} className="hover:underline">
+                          { product.title }
+                        </Link>
                         </td>
                         <td className="text-sm text-gray-900 font-light  whitespace-nowrap">
                         { product.gender }

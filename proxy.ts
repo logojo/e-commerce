@@ -7,6 +7,11 @@ export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const sessionCookie = getSessionCookie(request);
 
+   // Permitir acceso público a las imágenes de productos.
+  if (pathname.startsWith("/products/") && /\.(jpg|jpeg|png|webp|avif|gif|svg)$/i.test(pathname)) {
+    return NextResponse.next();
+  }
+
   // 1. Si intenta entrar al login y tiene cookie de sesión,
   // redirigir al home.
   if (pathname === "/auth/login") {
